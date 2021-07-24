@@ -4,15 +4,40 @@
 #include "ShootPlayer.h"
 //#include "CPP_Shooting.h"
 #include "PlayerMove.h"
+#include "PlayerFire.h"
+#include <Components/ArrowComponent.h>
+#include <Components/BoxComponent.h>
+#include <Components/StaticMeshComponent.h>
 
 // Sets default values
 AShootPlayer::AShootPlayer()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Actor 를 이루는 컴포넌트를 붙이자 (실제 add component)
+	// 생성자에서 - Actor 를 이루는 컴포넌트를 붙이자 (실제 add component). 이름은 다르게
 	playerMove = CreateDefaultSubobject<UPlayerMove>(TEXT("PlayerMove"));
+	playerFire = CreateDefaultSubobject<UPlayerFire>(TEXT("PlayerFire"));
+	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("FirePosition"));
+	// root 의 자식으로
+	firePosition->SetupAttachment(RootComponent);
+
+	//******************************************************************************
+	// Box Collision Component 추가
+	boxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	// Hit event 위해 root로
+	RootComponent = boxCollision;
+	// 충돌 옵션 Block 으로 설정. profile name : collision - preset - name
+	boxCollision->SetCollisionProfileName(TEXT("BlockAll"));
+
+
+	// Body Mesh Component 추가
+	bodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+	bodyMesh->SetupAttachment(RootComponent);                   // boxCollison or RootComponent
+	// 충돌 되지 않도록
+	bodyMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 자동으로 컨트롤러 제어를 받을 수 있도록 설정
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +63,7 @@ void AShootPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	// PlayerMove 컴포넌트의 SetupPlayer 함수를 호출하고 싶다.
 	playerMove->SetupPlayerInputComponent(PlayerInputComponent);
+	playerFire->SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 

@@ -30,4 +30,17 @@ public:
 	//PlayerMove 컴포넌트 추가 (속성 등록) -> 생성자에서 추가
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	class UPlayerMove* playerMove;            //class - 헤더 등록, 컴파일 타임 필요
+
+	UPROPERTY(VisibleAnywhere, Category="Component")
+	class UPlayerFire* playerFire;
+
+
+	// actor 에서 컨트롤하기 위해
+	UPROPERTY(VisibleAnywhere, Category = "FirePosition")
+	class UArrowComponent* firePosition;
+
+	UPROPERTY(VisibleAnywhere, Category = "Collision")
+	class UBoxComponent* boxCollision;
+	UPROPERTY(VisibleAnywhere, Category = "BodyMesh")
+	class UStaticMeshComponent* bodyMesh;
 };

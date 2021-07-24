@@ -1,6 +1,4 @@
 
-
-
 #include "PlayerMove.h"
 #include "ShootPlayer.h"
 
@@ -30,7 +28,6 @@ void UPlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// 사용자 입력에 따라 상화좌우로 이동하고 싶다.
 	//1. 방향이 필요
 //	FVector dir = FVector::RightVector;                    // y 값 설정됨
 	FVector dir = FVector(0, h, v);                        // 입력 등록 따로 해야 함
@@ -42,7 +39,7 @@ void UPlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	if (me) {
 		FVector P0 = me->GetActorLocation();
 		FVector P = P0 + (dir * speed) * DeltaTime;
-		me->SetActorLocation(P);
+		me->SetActorLocation(P, true);                            // true - hit event 를 위해
 	}
 }
 
